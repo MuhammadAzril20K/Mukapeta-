@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/TrisalTahirDrAkhmadSyarifuddinSEMSi_1.js"></script>
+        <script src="data/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2.js"></script>
+        <script src="data/DrHFaridKasimDrHjNurhaenihMSi_3.js"></script>
+        <script src="data/PutriDakkaSHDrsHHaidirBasirMM_4.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:false, maxZoom:28, minZoom:9
+        }).fitBounds([[-3.1087696906664997,120.01229976183838],[-2.8986161507775465,120.35795528565573]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        // remove popup's row if "visible-with-data"
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        // add class to format popup if it contains media
+		function addClassToPopupIfMedia(content, popup) {
+			var tempDiv = document.createElement('div');
+			tempDiv.innerHTML = content;
+			if (tempDiv.querySelector('td img')) {
+				popup._contentNode.classList.add('media');
+					// Delay to force the redraw
+					setTimeout(function() {
+						popup.update();
+					}, 10);
+			} else {
+				popup._contentNode.classList.remove('media');
+			}
+		}
+        var zoomControl = L.control.zoom({
+            position: 'topleft'
+        }).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_OpenStreetMap_0');
+        map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+        var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenStreetMap_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 9,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+        function pop_TrisalTahirDrAkhmadSyarifuddinSEMSi_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Trisal Tah</th>\
+                        <td>' + (feature.properties['Trisal Tah'] !== null ? autolinker.link(feature.properties['Trisal Tah'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_TrisalTahirDrAkhmadSyarifuddinSEMSi_1_0(feature) {
+            if (feature.properties['Trisal Tah'] >= 1615.000000 && feature.properties['Trisal Tah'] <= 1945.600000 ) {
+                return {
+                pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,235,226,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Trisal Tah'] >= 1945.600000 && feature.properties['Trisal Tah'] <= 3461.200000 ) {
+                return {
+                pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,180,185,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Trisal Tah'] >= 3461.200000 && feature.properties['Trisal Tah'] <= 3710.000000 ) {
+                return {
+                pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,104,161,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Trisal Tah'] >= 3710.000000 && feature.properties['Trisal Tah'] <= 4833.600000 ) {
+                return {
+                pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(197,27,138,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Trisal Tah'] >= 4833.600000 && feature.properties['Trisal Tah'] <= 7557.000000 ) {
+                return {
+                pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,1,119,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1');
+        map.getPane('pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1').style.zIndex = 401;
+        map.getPane('pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1').style['mix-blend-mode'] = 'normal';
+        var layer_TrisalTahirDrAkhmadSyarifuddinSEMSi_1 = new L.geoJson(json_TrisalTahirDrAkhmadSyarifuddinSEMSi_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+            layerName: 'layer_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+            pane: 'pane_TrisalTahirDrAkhmadSyarifuddinSEMSi_1',
+            onEachFeature: pop_TrisalTahirDrAkhmadSyarifuddinSEMSi_1,
+            style: style_TrisalTahirDrAkhmadSyarifuddinSEMSi_1_0,
+        });
+        bounds_group.addLayer(layer_TrisalTahirDrAkhmadSyarifuddinSEMSi_1);
+        map.addLayer(layer_TrisalTahirDrAkhmadSyarifuddinSEMSi_1);
+        function pop_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ir. H. Rah</th>\
+                        <td>' + (feature.properties['Ir. H. Rah'] !== null ? autolinker.link(feature.properties['Ir. H. Rah'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_0(feature) {
+            if (feature.properties['Ir. H. Rah'] >= 693.000000 && feature.properties['Ir. H. Rah'] <= 1173.200000 ) {
+                return {
+                pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,240,217,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Ir. H. Rah'] >= 1173.200000 && feature.properties['Ir. H. Rah'] <= 1571.200000 ) {
+                return {
+                pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,204,138,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Ir. H. Rah'] >= 1571.200000 && feature.properties['Ir. H. Rah'] <= 2386.400000 ) {
+                return {
+                pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,141,89,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Ir. H. Rah'] >= 2386.400000 && feature.properties['Ir. H. Rah'] <= 3197.600000 ) {
+                return {
+                pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,74,51,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Ir. H. Rah'] >= 3197.600000 && feature.properties['Ir. H. Rah'] <= 3949.000000 ) {
+                return {
+                pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,0,0,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2');
+        map.getPane('pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2').style.zIndex = 402;
+        map.getPane('pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2').style['mix-blend-mode'] = 'normal';
+        var layer_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2 = new L.geoJson(json_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+            layerName: 'layer_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+            pane: 'pane_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2',
+            onEachFeature: pop_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2,
+            style: style_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_0,
+        });
+        bounds_group.addLayer(layer_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2);
+        map.addLayer(layer_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2);
+        function pop_DrHFaridKasimDrHjNurhaenihMSi_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dr. H. Far</th>\
+                        <td>' + (feature.properties['Dr. H. Far'] !== null ? autolinker.link(feature.properties['Dr. H. Far'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_DrHFaridKasimDrHjNurhaenihMSi_3_0(feature) {
+            if (feature.properties['Dr. H. Far'] >= 1575.000000 && feature.properties['Dr. H. Far'] <= 2078.600000 ) {
+                return {
+                pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,252,245,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Dr. H. Far'] >= 2078.600000 && feature.properties['Dr. H. Far'] <= 3058.000000 ) {
+                return {
+                pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(201,234,194,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Dr. H. Far'] >= 3058.000000 && feature.properties['Dr. H. Far'] <= 3723.600000 ) {
+                return {
+                pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,199,124,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Dr. H. Far'] >= 3723.600000 && feature.properties['Dr. H. Far'] <= 5362.000000 ) {
+                return {
+                pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(42,146,75,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Dr. H. Far'] >= 5362.000000 && feature.properties['Dr. H. Far'] <= 6781.000000 ) {
+                return {
+                pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,68,27,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_DrHFaridKasimDrHjNurhaenihMSi_3');
+        map.getPane('pane_DrHFaridKasimDrHjNurhaenihMSi_3').style.zIndex = 403;
+        map.getPane('pane_DrHFaridKasimDrHjNurhaenihMSi_3').style['mix-blend-mode'] = 'normal';
+        var layer_DrHFaridKasimDrHjNurhaenihMSi_3 = new L.geoJson(json_DrHFaridKasimDrHjNurhaenihMSi_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_DrHFaridKasimDrHjNurhaenihMSi_3',
+            layerName: 'layer_DrHFaridKasimDrHjNurhaenihMSi_3',
+            pane: 'pane_DrHFaridKasimDrHjNurhaenihMSi_3',
+            onEachFeature: pop_DrHFaridKasimDrHjNurhaenihMSi_3,
+            style: style_DrHFaridKasimDrHjNurhaenihMSi_3_0,
+        });
+        bounds_group.addLayer(layer_DrHFaridKasimDrHjNurhaenihMSi_3);
+        map.addLayer(layer_DrHFaridKasimDrHjNurhaenihMSi_3);
+        function pop_PutriDakkaSHDrsHHaidirBasirMM_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Putri Dakk</th>\
+                        <td>' + (feature.properties['Putri Dakk'] !== null ? autolinker.link(feature.properties['Putri Dakk'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_PutriDakkaSHDrsHHaidirBasirMM_4_0(feature) {
+            if (feature.properties['Putri Dakk'] >= 259.000000 && feature.properties['Putri Dakk'] <= 507.800000 ) {
+                return {
+                pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,251,255,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Putri Dakk'] >= 507.800000 && feature.properties['Putri Dakk'] <= 668.400000 ) {
+                return {
+                pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(200,220,240,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Putri Dakk'] >= 668.400000 && feature.properties['Putri Dakk'] <= 946.800000 ) {
+                return {
+                pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,216,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Putri Dakk'] >= 946.800000 && feature.properties['Putri Dakk'] <= 1156.200000 ) {
+                return {
+                pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(41,121,185,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Putri Dakk'] >= 1156.200000 && feature.properties['Putri Dakk'] <= 1967.000000 ) {
+                return {
+                pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,48,107,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_PutriDakkaSHDrsHHaidirBasirMM_4');
+        map.getPane('pane_PutriDakkaSHDrsHHaidirBasirMM_4').style.zIndex = 404;
+        map.getPane('pane_PutriDakkaSHDrsHHaidirBasirMM_4').style['mix-blend-mode'] = 'normal';
+        var layer_PutriDakkaSHDrsHHaidirBasirMM_4 = new L.geoJson(json_PutriDakkaSHDrsHHaidirBasirMM_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PutriDakkaSHDrsHHaidirBasirMM_4',
+            layerName: 'layer_PutriDakkaSHDrsHHaidirBasirMM_4',
+            pane: 'pane_PutriDakkaSHDrsHHaidirBasirMM_4',
+            onEachFeature: pop_PutriDakkaSHDrsHHaidirBasirMM_4,
+            style: style_PutriDakkaSHDrsHHaidirBasirMM_4_0,
+        });
+        bounds_group.addLayer(layer_PutriDakkaSHDrsHHaidirBasirMM_4);
+        map.addLayer(layer_PutriDakkaSHDrsHHaidirBasirMM_4);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var overlaysTree = [
+            {label: 'Putri Dakka, S.H -Drs. H. Haidir Basir, M.M <br /><table><tr><td style="text-align: center;"><img src="legend/PutriDakkaSHDrsHHaidirBasirMM_4_2595080.png" /></td><td>259 - 508</td></tr><tr><td style="text-align: center;"><img src="legend/PutriDakkaSHDrsHHaidirBasirMM_4_5086681.png" /></td><td>508 - 668</td></tr><tr><td style="text-align: center;"><img src="legend/PutriDakkaSHDrsHHaidirBasirMM_4_6689472.png" /></td><td>668 - 947</td></tr><tr><td style="text-align: center;"><img src="legend/PutriDakkaSHDrsHHaidirBasirMM_4_94711563.png" /></td><td>947 - 1156</td></tr><tr><td style="text-align: center;"><img src="legend/PutriDakkaSHDrsHHaidirBasirMM_4_115619674.png" /></td><td>1156 - 1967</td></tr></table>', layer: layer_PutriDakkaSHDrsHHaidirBasirMM_4},
+            {label: 'Dr. H. Farid Kasim - Dr. Hj. Nurhaenih, M.Si <br /><table><tr><td style="text-align: center;"><img src="legend/DrHFaridKasimDrHjNurhaenihMSi_3_157520790.png" /></td><td>1575 - 2079</td></tr><tr><td style="text-align: center;"><img src="legend/DrHFaridKasimDrHjNurhaenihMSi_3_207930581.png" /></td><td>2079 - 3058</td></tr><tr><td style="text-align: center;"><img src="legend/DrHFaridKasimDrHjNurhaenihMSi_3_305837242.png" /></td><td>3058 - 3724</td></tr><tr><td style="text-align: center;"><img src="legend/DrHFaridKasimDrHjNurhaenihMSi_3_372453623.png" /></td><td>3724 - 5362</td></tr><tr><td style="text-align: center;"><img src="legend/DrHFaridKasimDrHjNurhaenihMSi_3_536267814.png" /></td><td>5362 - 6781</td></tr></table>', layer: layer_DrHFaridKasimDrHjNurhaenihMSi_3},
+            {label: 'Ir. H. Rahmat Masri Bandaso, M.Si - Hj. Andi Tenri Karta, S.AN<br /><table><tr><td style="text-align: center;"><img src="legend/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_69311730.png" /></td><td>693 - 1173</td></tr><tr><td style="text-align: center;"><img src="legend/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_117315711.png" /></td><td>1173 - 1571</td></tr><tr><td style="text-align: center;"><img src="legend/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_157123862.png" /></td><td>1571 - 2386</td></tr><tr><td style="text-align: center;"><img src="legend/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_238631983.png" /></td><td>2386 - 3198</td></tr><tr><td style="text-align: center;"><img src="legend/IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2_319839494.png" /></td><td>3198 - 3949</td></tr></table>', layer: layer_IrHRahmatMasriBandasoMSiHjAndiTenriKartaSAN_2},
+            {label: 'Trisal Tahir - Dr. Akhmad Syarifuddin, S.E., M.Si<br /><table><tr><td style="text-align: center;"><img src="legend/TrisalTahirDrAkhmadSyarifuddinSEMSi_1_161519460.png" /></td><td>1615 - 1946</td></tr><tr><td style="text-align: center;"><img src="legend/TrisalTahirDrAkhmadSyarifuddinSEMSi_1_194634611.png" /></td><td>1946 - 3461</td></tr><tr><td style="text-align: center;"><img src="legend/TrisalTahirDrAkhmadSyarifuddinSEMSi_1_346137102.png" /></td><td>3461 - 3710</td></tr><tr><td style="text-align: center;"><img src="legend/TrisalTahirDrAkhmadSyarifuddinSEMSi_1_371048343.png" /></td><td>3710 - 4834</td></tr><tr><td style="text-align: center;"><img src="legend/TrisalTahirDrAkhmadSyarifuddinSEMSi_1_483475574.png" /></td><td>4834 - 7557</td></tr></table>', layer: layer_TrisalTahirDrAkhmadSyarifuddinSEMSi_1},
+            {label: "OpenStreetMap", layer: layer_OpenStreetMap_0, radioGroup: 'bm' },]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: false, 
+        });
+        lay.addTo(map);
+		document.addEventListener("DOMContentLoaded", function() {
+            // set new Layers List height which considers toggle icon
+            function newLayersListHeight() {
+                var layerScrollbarElement = document.querySelector('.leaflet-control-layers-scrollbar');
+                if (layerScrollbarElement) {
+                    var layersListElement = document.querySelector('.leaflet-control-layers-list');
+                    var originalHeight = layersListElement.style.height 
+                        || window.getComputedStyle(layersListElement).height;
+                    var newHeight = parseFloat(originalHeight) - 50;
+                    layersListElement.style.height = newHeight + 'px';
+                }
+            }
+            var isLayersListExpanded = true;
+            var controlLayersElement = document.querySelector('.leaflet-control-layers');
+            var toggleLayerControl = document.querySelector('.leaflet-control-layers-toggle');
+            // toggle Collapsed/Expanded and apply new Layers List height
+            toggleLayerControl.addEventListener('click', function() {
+                if (isLayersListExpanded) {
+                    controlLayersElement.classList.remove('leaflet-control-layers-expanded');
+                } else {
+                    controlLayersElement.classList.add('leaflet-control-layers-expanded');
+                }
+                isLayersListExpanded = !isLayersListExpanded;
+                newLayersListHeight()
+            });	
+			// apply new Layers List height if toggle layerstree
+			if (controlLayersElement) {
+				controlLayersElement.addEventListener('click', function(event) {
+					var toggleLayerHeaderPointer = event.target.closest('.leaflet-layerstree-header-pointer span');
+					if (toggleLayerHeaderPointer) {
+						newLayersListHeight();
+					}
+				});
+			}
+            // Collapsed/Expanded at Start to apply new height
+            setTimeout(function() {
+                toggleLayerControl.click();
+            }, 10);
+            setTimeout(function() {
+                toggleLayerControl.click();
+            }, 10);
+            // Collapsed touch/small screen
+            var isSmallScreen = window.innerWidth < 650;
+            if (isSmallScreen) {
+                setTimeout(function() {
+                    controlLayersElement.classList.remove('leaflet-control-layers-expanded');
+                    isLayersListExpanded = !isLayersListExpanded;
+                }, 500);
+            }  
+        });       
+        setBounds();
+        </script>
+    </body>
+</html>
